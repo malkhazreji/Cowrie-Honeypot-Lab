@@ -28,35 +28,35 @@ The Ubuntu Server VM ran Cowrie and acted as the decoy/monitored system, while K
 
 **1. Cowrie deployed and listening on port 2222**
 
-![Cowrie running](images/01-cowrie-running-listening-port-2222.png)
+![Cowrie running](cowrie-honeypot-project/cowrie-honeypot-project/images/01-cowrie-running-listening-port-2222.png)
 
 **2. Captured attack: JSON logs**
 
 Login attempt with guessed credentials (`root`/`toor`) succeeded, followed by recon commands (`whoami`, `/etc/passwd` enumeration, `ls -la /root`, `ifconfig`). All of this was logged with timestamps and source IP, including a typo I made mid-session (`ifconifg`), which Cowrie correctly returned as "command not found," just like a real shell.
 
-![Captured JSON logs](images/02-captured-attack-json-logs.png)
+![Captured JSON logs](cowrie-honeypot-project/cowrie-honeypot-project/images/02-captured-attack-json-logs.png)
 
 **3. Full TTY session replay**
 
 Cowrie saves a keystroke-by-keystroke replay of every session, playable with the `playlog` tool. This is the same kind of evidence a SOC analyst would use to reconstruct an intrusion after the fact.
 
-![TTY replay](images/03-tty-session-replay.png)
+![TTY replay](cowrie-honeypot-project/cowrie-honeypot-project/images/03-tty-session-replay.png)
 
 **4. Persistent static IP configuration**
 
 Configured via netplan so the lab network survives reboots instead of resetting.
 
-![Static IP config](images/04-permanent-static-ip-config.png)
+![Static IP config](cowrie-honeypot-project/cowrie-honeypot-project/images/04-permanent-static-ip-config.png)
 
 **5. Troubleshooting: isolated network vs. package installation**
 
 Hit a real infrastructure problem: the honeypot VM's isolated network (by design, for security) blocked internet access needed to install Cowrie's dependencies. Solved by temporarily adding a second NAT-only adapter for setup, while keeping the primary lab-facing adapter fully isolated.
 
-![Troubleshooting](images/05-troubleshooting-network-isolation.png)
+![Troubleshooting](cowrie-honeypot-project/cowrie-honeypot-project/images/05-troubleshooting-network-isolation.png)
 
 ## What I learned
 
-The biggest learning experience was adapting to a changed install process. The documentation I initially followed was outdated, and the project had moved from a manual `cp cowrie.cfg.dist cowrie.cfg` setup to a `cowrie init`-based workflow bundled inside the Python package. I diagnosed this by comparing my directory contents against the actual GitHub source rather than trusting an older guide.
+The biggest learning experience was adapting to a changed install process. The documentation I initially followed was outdated, and the project had moved from a manual `cp cowrie.cfg.dist cowrie.cfg` setup to a `cowrie init` based workflow bundled inside the Python package. I diagnosed this by comparing my directory contents against the actual GitHub source rather than trusting an older guide.
 
 I also learned how differently Linux distributions handle network persistence: Ubuntu Server uses netplan, Kali uses NetworkManager, and older Debian-based systems (Metasploitable2) use the legacy `/etc/network/interfaces` file. I had to configure static IPs three different ways across the same lab to keep the network stable across reboots.
 
