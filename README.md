@@ -38,7 +38,7 @@ Login attempt with guessed credentials (`root`/`toor`) succeeded, followed by re
 
 **3. Full TTY session replay**
 
-Cowrie saves a keystroke-by-keystroke replay of every session, playable with the `playlog` tool. This is the same kind of evidence a SOC analyst would use to reconstruct an intrusion after the fact.
+Cowrie saves a keystroke-by-keystroke replay of every session, playable with the playlog tool. The replay below shows the full simulated attack playing back verbatim: the whoami result, a fake /etc/passwd file (Cowrie even invents a believable extra user account to sell the illusion of a real system), the /root directory listing, and the ifconifg typo correctly failing with "command not found." This is the same kind of evidence a SOC analyst would use to reconstruct an intrusion after the fact.
 
 ![TTY replay](cowrie-honeypot-project/cowrie-honeypot-project/images/03-tty-session-replay.png)
 
